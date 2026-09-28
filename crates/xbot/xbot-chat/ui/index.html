@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#ffffff" id="meta-theme-color"/>
+  <title>XBot</title>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('xbot-theme');
+        if (t !== 'light' && t !== 'dark') {
+          t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg"/>
+  <link rel="stylesheet" href="assets/phosphor.css"/>
+  <link rel="stylesheet" href="crux.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div id="app">
+    <aside id="sidebar" class="panel panel--muted" aria-label="XBot">
+      <div class="sidebar-brand">
+        <img class="app-logo" src="assets/logo.svg" alt="" width="36" height="36"/>
+        <div>
+          <div class="brand-name">XBot</div>
+          <div class="brand-sub">System fixer</div>
+        </div>
+      </div>
+
+      <div class="sidebar-actions">
+        <button type="button" class="sidebar-btn pressable" id="new-chat" title="New chat (Ctrl+N)">
+          <span class="ph ph-chat-circle-dots" aria-hidden="true"></span> New Chat
+        </button>
+      </div>
+
+      <div class="list-head">
+        <span>Problems</span>
+        <button type="button" class="icon-btn pressable" id="refresh-btn" title="Refresh" aria-label="Refresh">
+          <span class="ph ph-arrows-clockwise" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div id="incident-list" class="side-list" role="list" aria-live="polite"></div>
+
+      <div class="list-head"><span>Chats</span></div>
+      <div id="chat-list" class="side-list" role="list"></div>
+
+      <div class="daemon-row" id="daemon-row" aria-live="polite">
+        <span class="daemon-dot" id="daemon-dot" aria-hidden="true"></span>
+        <span id="daemon-text">Connecting to XBot…</span>
+      </div>
+    </aside>
+
+    <div id="main-col">
+      <header id="header" class="panel">
+        <div class="header-left">
+          <h1 id="chat-title" class="chat-title">New Chat</h1>
+          <span id="status-pill" class="status-pill">Connecting…</span>
+        </div>
+        <div class="header-actions">
+          <button type="button" class="glass-btn pressable" id="theme-toggle" title="Switch to dark mode" aria-label="Switch to dark mode">
+            <span class="ph ph-moon icon-light" aria-hidden="true"></span>
+            <span class="ph ph-sun icon-dark" aria-hidden="true"></span>
+          </button>
+          <button type="button" class="glass-btn pressable" id="settings-btn" title="Settings (Ctrl+,)">
+            <span class="ph ph-gear-six" aria-hidden="true"></span> Settings
+          </button>
+        </div>
+      </header>
+
+      <main id="thread" aria-label="Conversation">
+        <section id="welcome" class="welcome">
+          <img class="welcome-logo" src="assets/logo.svg" alt="" width="64" height="64"/>
+          <h2>What needs fixing?</h2>
+          <p class="welcome-sub">Describe the problem in your own words. XBot explains what went wrong and asks before it changes anything.</p>
+          <div class="suggestions" role="list">
+            <button type="button" class="suggestion pressable" role="listitem" data-prompt="My Wi-Fi keeps disconnecting.">
+              <span class="ph ph-wifi-high" aria-hidden="true"></span>
+              <span>My Wi-Fi keeps disconnecting</span>
+            </button>
+            <button type="button" class="suggestion pressable" role="listitem" data-prompt="There's no sound from my speakers.">
+              <span class="ph ph-speaker-high" aria-hidden="true"></span>
+              <span>There's no sound</span>
+            </button>
+            <button type="button" class="suggestion pressable" role="listitem" data-prompt="My Bluetooth headphones won't connect.">
+              <span class="ph ph-bluetooth" aria-hidden="true"></span>
+              <span>Bluetooth won't connect</span>
+            </button>
+            <button type="button" class="suggestion pressable" role="listitem" data-prompt="An app keeps crashing. Can you find out why?">
+              <span class="ph ph-warning-circle" aria-hidden="true"></span>
+              <span>An app keeps crashing</span>
+            </button>
+          </div>
+        </section>
+        <div id="messages" class="messages" role="log" aria-live="polite"></div>
+      </main>
+
+      <form id="composer" class="composer" autocomplete="off">
+        <div class="composer-box">
+          <label class="sr-only" for="prompt">Message XBot</label>
+          <textarea id="prompt" rows="1" placeholder="Describe the problem…"></textarea>
+          <button type="submit" class="send-btn pressable" id="send-btn" title="Send (Enter)" aria-label="Send">
+            <span class="ph ph-arrow-up" aria-hidden="true"></span>
+          </button>
+        </div>
+        <p class="composer-hint" id="composer-hint">Enter to send · Shift+Enter for a new line</p>
+      </form>
+    </div>
+  </div>
+
+  <div id="settings" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="modal-backdrop" data-close></div>
+    <form class="modal-card panel panel--floating" id="settings-form">
+      <h2 class="modal-title" id="settings-title">XBot Settings</h2>
+
+      <h3 class="settings-group">Monitoring</h3>
+      <div class="setting">
+        <div>
+          <div class="setting-label" id="lbl-monitoring">Watch for problems</div>
+          <div class="setting-sub">Look for crashes and errors while you work.</div>
+        </div>
+        <button type="button" class="switch" role="switch" data-key="general.monitoring" aria-labelledby="lbl-monitoring"></button>
+      </div>
+      <div class="setting">
+        <div>
+          <div class="setting-label" id="lbl-popups">Show pop-ups</div>
+          <div class="setting-sub">Tell me when something breaks.</div>
+        </div>
+        <button type="button" class="switch" role="switch" data-key="general.popups" aria-labelledby="lbl-popups"></button>
+      </div>
+      <div class="setting">
+        <div>
+          <div class="setting-label" id="lbl-dnd">Respect Do Not Disturb</div>
+          <div class="setting-sub">Hold pop-ups while Do Not Disturb is on.</div>
+        </div>
+        <button type="button" class="switch" role="switch" data-key="general.follow_dnd" aria-labelledby="lbl-dnd"></button>
+      </div>
+
+      <h3 class="settings-group">Privacy</h3>
+      <div class="setting">
+        <div>
+          <div class="setting-label" id="lbl-shots">Screenshots</div>
+          <div class="setting-sub">Let XBot look at the screen when you ask.</div>
+        </div>
+        <button type="button" class="switch" role="switch" data-key="privacy.screenshots" aria-labelledby="lbl-shots"></button>
+      </div>
+      <div class="setting">
+        <div>
+          <div class="setting-label" id="lbl-search">Web search</div>
+          <div class="setting-sub">Search the web for known fixes.</div>
+        </div>
+        <button type="button" class="switch" role="switch" data-key="privacy.web_search" aria-labelledby="lbl-search"></button>
+      </div>
+      <div class="setting">
+        <div>
+          <div class="setting-label" id="lbl-browser">Browser use</div>
+          <div class="setting-sub">Use XBot's own isolated browser. Never your Brave profile.</div>
+        </div>
+        <button type="button" class="switch" role="switch" data-key="privacy.browser_use" aria-labelledby="lbl-browser"></button>
+      </div>
+
+      <h3 class="settings-group">Voice</h3>
+      <div class="setting">
+        <div>
+          <div class="setting-label" id="lbl-voice">Voice</div>
+          <div class="setting-sub">Not available in this version yet.</div>
+        </div>
+        <button type="button" class="switch" role="switch" data-key="voice.enabled" aria-labelledby="lbl-voice" disabled></button>
+      </div>
+
+      <p class="settings-note">XBot reads these settings when it starts.</p>
+      <p class="settings-error hidden" id="settings-error" role="alert"></p>
+      <div class="modal-actions">
+        <button type="button" class="glass-btn pressable" data-close>Cancel</button>
+        <button type="submit" class="glass-btn primary pressable" id="settings-save">Save</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="toast hidden" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>

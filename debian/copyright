@@ -3,3 +3,16 @@ Upstream-Name: xbot
 Files: *
 Copyright: To be supplied by project owner
 License: To be supplied by project owner
+
+Files: crates/xbot/xbot-chat/ui/assets/InterVariable.woff2
+Copyright: 2016 The Inter Project Authors (https://github.com/rsms/inter)
+License: OFL-1.1
+ See crates/xbot/xbot-chat/ui/assets/Inter-LICENSE.txt, installed as
+ /usr/share/doc/xbot-chat/Inter-LICENSE.txt.
+
+Files: crates/xbot/xbot-chat/ui/assets/Phosphor.woff2
+ crates/xbot/xbot-chat/ui/assets/phosphor.css
+Copyright: 2020-2021 Phosphor Icons
+License: MIT
+ See crates/xbot/xbot-chat/ui/assets/phosphor-LICENSE.txt, installed as
+ /usr/share/doc/xbot-chat/phosphor-LICENSE.txt.
