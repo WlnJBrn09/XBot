@@ -1,0 +1,5 @@
+[package]
+name = "xbot-browser"
+version.workspace = true
+edition.workspace = true
+description = "isolated Chromium control"

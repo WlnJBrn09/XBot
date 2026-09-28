@@ -1,0 +1,5 @@
+[package]
+name = "xbot-voice"
+version.workspace = true
+edition.workspace = true
+description = "PipeWire and realtime voice adapters"

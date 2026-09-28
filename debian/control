@@ -1,0 +1,27 @@
+Source: xbot
+Section: utils
+Priority: optional
+Maintainer: CruxOS XBot Maintainers <xbot@invalid.example>
+Build-Depends: debhelper-compat (= 13), cargo, rustc, pkg-config
+Standards-Version: 4.7.0
+Rules-Requires-Root: no
+
+Package: xbot
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, dbus-user-session
+Recommends: chromium
+Description: CruxOS system fixer daemon and command line bridge
+ XBot monitors and helps repair CruxOS system problems. This X0 package
+ contains the service and status interface; detection is added in X1.
+
+Package: xbot-helper
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: XBot privileged helper scaffold
+ The helper is inactive in X0 and receives no privileged D-Bus activation.
+
+Package: xbot-chat
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, xbot (= ${binary:Version})
+Description: XBot chat application scaffold
+ The graphical chat application is added in X2.

@@ -1,0 +1,4 @@
+target/release/xbotd usr/bin
+target/release/crux usr/bin
+assets/systemd/xbotd.service usr/lib/systemd/user
+assets/dbus/org.cruxos.XBot1.service usr/share/dbus-1/services

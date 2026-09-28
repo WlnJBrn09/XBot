@@ -1,0 +1,5 @@
+[package]
+name = "xbot-skills"
+version.workspace = true
+edition.workspace = true
+description = "shared SKILL.md discovery and creation"

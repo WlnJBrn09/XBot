@@ -1,0 +1,5 @@
+[package]
+name = "xbot-redact"
+version.workspace = true
+edition.workspace = true
+description = "secret and personal data redaction"

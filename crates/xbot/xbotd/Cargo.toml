@@ -1,0 +1,11 @@
+[package]
+name = "xbotd"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+xbot-core = { path = "../xbot-core" }
+serde_json.workspace = true
+tokio.workspace = true
+zbus.workspace = true
+

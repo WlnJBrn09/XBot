@@ -1,0 +1,4 @@
+[package]
+name = "xbot-chat"
+version.workspace = true
+edition.workspace = true

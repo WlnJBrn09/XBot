@@ -1,0 +1,5 @@
+[package]
+name = "xbot-models"
+version.workspace = true
+edition.workspace = true
+description = "AI provider adapters and routing"

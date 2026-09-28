@@ -1,0 +1,2 @@
+target/release/xbot-chat usr/bin
+target/release/xbot-toast usr/bin

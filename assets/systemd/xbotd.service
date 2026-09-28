@@ -1,0 +1,16 @@
+[Unit]
+Description=XBot system fixer daemon
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=dbus
+BusName=org.cruxos.XBot1
+ExecStart=/usr/bin/xbotd
+Restart=on-failure
+RestartSec=3
+MemoryMax=1G
+Nice=5
+
+[Install]
+WantedBy=graphical-session.target

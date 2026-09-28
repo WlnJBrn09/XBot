@@ -1,0 +1,5 @@
+[package]
+name = "xbot-search"
+version.workspace = true
+edition.workspace = true
+description = "Brave and Exa search clients"

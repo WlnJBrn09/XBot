@@ -1,0 +1,5 @@
+[package]
+name = "xbot-testkit"
+version.workspace = true
+edition.workspace = true
+description = "deterministic integration fixtures and VM runner"

@@ -1,0 +1,5 @@
+[package]
+name = "xbot-store"
+version.workspace = true
+edition.workspace = true
+description = "SQLite persistence and migrations"

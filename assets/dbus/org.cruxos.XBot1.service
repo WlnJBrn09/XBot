@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=org.cruxos.XBot1
+Exec=/usr/bin/xbotd
+SystemdService=xbotd.service

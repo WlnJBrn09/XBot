@@ -1,0 +1,12 @@
+[package]
+name = "crux"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+xbot-core = { path = "../xbot/xbot-core" }
+clap.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+zbus.workspace = true
+

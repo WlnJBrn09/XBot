@@ -1,0 +1,13 @@
+/target/
+/debian/.debhelper/
+/debian/debhelper-build-stamp
+/debian/files
+/debian/*.debhelper.log
+/debian/*.substvars
+/debian/xbot/
+/debian/xbot-chat/
+/debian/xbot-helper/
+*.deb
+*.buildinfo
+*.changes
+

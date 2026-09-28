@@ -1,0 +1,5 @@
+[package]
+name = "xbot-tools"
+version.workspace = true
+edition.workspace = true
+description = "tool registry, policy and approval gate"

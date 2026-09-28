@@ -1,0 +1,16 @@
+[workspace]
+resolver = "2"
+members = ["crates/xbot/*", "crates/crux-cli"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "signal"] }
+zbus = { version = "5", default-features = false, features = ["tokio"] }
+clap = { version = "4", features = ["derive"] }
+

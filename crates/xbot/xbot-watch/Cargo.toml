@@ -1,0 +1,5 @@
+[package]
+name = "xbot-watch"
+version.workspace = true
+edition.workspace = true
+description = "system error detectors and incident grouping"

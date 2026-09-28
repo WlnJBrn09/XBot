@@ -1,0 +1,4 @@
+[package]
+name = "xbot-toast"
+version.workspace = true
+edition.workspace = true

@@ -1,0 +1,33 @@
+name: Debian 13
+on:
+  push:
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: debian:trixie
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build tools
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends ca-certificates curl build-essential pkg-config libssl-dev debhelper dpkg-dev dbus cargo rustc
+      - name: Install Rust
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+      - name: Format
+        run: cargo fmt --all --check
+      - name: Lint
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: Build and test
+        run: |
+          cargo build --workspace
+          cargo test --workspace
+      - name: Private D-Bus status smoke test
+        run: |
+          sh tests/x0-status.sh /tmp/xbot-status.json /tmp/crux-help.json
+          grep -q '"schema":"xbot.status/1"' /tmp/xbot-status.json
+          grep -q '"name":"xbot status"' /tmp/crux-help.json
+      - name: Debian packages
+        run: dpkg-buildpackage -us -uc -b
