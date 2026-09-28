@@ -151,6 +151,8 @@ pub enum ConfigError {
     MissingHome,
     Read(io::Error),
     Parse(toml::de::Error),
+    Write(io::Error),
+    Serialize(toml::ser::Error),
 }
 
 impl std::fmt::Display for ConfigError {
@@ -159,6 +161,8 @@ impl std::fmt::Display for ConfigError {
             Self::MissingHome => write!(f, "HOME is not set"),
             Self::Read(err) => write!(f, "cannot read XBot configuration: {err}"),
             Self::Parse(err) => write!(f, "invalid XBot configuration: {err}"),
+            Self::Write(err) => write!(f, "cannot write XBot configuration: {err}"),
+            Self::Serialize(err) => write!(f, "cannot encode XBot configuration: {err}"),
         }
     }
 }
@@ -184,6 +188,22 @@ impl Config {
             Err(err) if err.kind() == io::ErrorKind::NotFound => Ok(Self::default()),
             Err(err) => Err(ConfigError::Read(err)),
         }
+    }
+
+    pub fn save(&self) -> Result<(), ConfigError> {
+        self.save_to(Self::path()?)
+    }
+
+    /// Writes the configuration atomically: a temporary file in the same
+    /// directory is renamed over the old one.
+    pub fn save_to(&self, path: PathBuf) -> Result<(), ConfigError> {
+        let raw = toml::to_string_pretty(self).map_err(ConfigError::Serialize)?;
+        if let Some(dir) = path.parent() {
+            fs::create_dir_all(dir).map_err(ConfigError::Write)?;
+        }
+        let tmp = path.with_extension("toml.tmp");
+        fs::write(&tmp, raw).map_err(ConfigError::Write)?;
+        fs::rename(&tmp, &path).map_err(ConfigError::Write)
     }
 }
 
@@ -233,6 +253,21 @@ mod tests {
         assert!(!config.general.monitoring);
         assert!(!config.voice.enabled);
         assert!(!config.privacy.web_search);
+    }
+
+    #[test]
+    fn saved_config_round_trips() {
+        let dir = env::temp_dir().join(format!("xbot-core-test-{}", std::process::id()));
+        let path = dir.join("xbot/config.toml");
+        let mut config = Config::default();
+        config.general.popups = false;
+        config.privacy.web_search = true;
+        config.save_to(path.clone()).unwrap();
+        let loaded = Config::load_from(path).unwrap();
+        assert!(!loaded.general.popups);
+        assert!(loaded.privacy.web_search);
+        assert!(!loaded.voice.enabled);
+        fs::remove_dir_all(dir).unwrap();
     }
 
     #[test]

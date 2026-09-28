@@ -1,2 +1,6 @@
 target/release/xbot-chat usr/bin
 target/release/xbot-toast usr/bin
+assets/applications/org.cruxos.XBot.desktop usr/share/applications
+assets/icons/hicolor usr/share/icons
+crates/xbot/xbot-chat/ui/assets/Inter-LICENSE.txt usr/share/doc/xbot-chat
+crates/xbot/xbot-chat/ui/assets/phosphor-LICENSE.txt usr/share/doc/xbot-chat

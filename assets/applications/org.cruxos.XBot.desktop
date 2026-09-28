@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=XBot
+GenericName=System Fixer
+Comment=Explain and fix problems with your system
+Exec=xbot-chat
+Icon=org.cruxos.XBot
+Categories=System;
+Keywords=fix;repair;troubleshoot;help;crash;error;
+Terminal=false
+StartupNotify=true

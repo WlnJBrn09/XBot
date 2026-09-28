@@ -11,7 +11,7 @@ jobs:
       - name: Install build tools
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends ca-certificates curl build-essential pkg-config libssl-dev debhelper dpkg-dev dbus cargo rustc
+          apt-get install -y --no-install-recommends ca-certificates curl build-essential pkg-config libssl-dev debhelper dpkg-dev dbus cargo rustc libgtk-3-dev libwebkit2gtk-4.1-dev
       - name: Install Rust
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
